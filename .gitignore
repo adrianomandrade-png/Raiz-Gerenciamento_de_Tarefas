@@ -39,3 +39,7 @@ ENV/
 .env
 .env.*
 !.env.example
+
+# Prompts locais
+prompts.md
+Prompts Micro-API - Módulo C4.md
