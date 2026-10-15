@@ -84,6 +84,7 @@ python -c 'from shopping_cart import add_item_to_cart; cart = {}; add_item_to_ca
 
 ```text
 .
+├── LICENSE             # Licença MIT
 ├── README.md           # Visão geral e instruções do projeto
 ├── arquitetura.md      # Diagrama da arquitetura planejada
 ├── pyproject.toml      # Configuração básica de dependências para Poetry
@@ -113,7 +114,7 @@ python -m pytest --cov=shopping_cart --cov-report=term-missing
 - FastAPI, modelos Pydantic, serviços, repositórios e integração com PostgreSQL estão apenas representados no diagrama arquitetural.
 - Não há testes, cobertura, configuração de ambiente, migrações ou containers.
 - Não há documentação sobre autenticação, autorização ou filtros de busca.
-- As ferramentas de IA utilizadas e a licença do projeto não estão especificadas.
+- As ferramentas de IA utilizadas ainda não estão especificadas.
 
 Próximos passos sugeridos:
 
@@ -121,7 +122,7 @@ Próximos passos sugeridos:
 2. Definir configuração e execução local do PostgreSQL, incluindo migrações.
 3. Adicionar testes unitários e de integração e configurar cobertura.
 4. Documentar endpoints, variáveis de ambiente e decisões de segurança.
-5. Definir e incluir uma licença.
+5. Evoluir a API e documentar os contratos dos endpoints.
 
 ## Contribuição
 
@@ -142,4 +143,5 @@ Próximos passos sugeridos:
 
 ## Licença
 
-O repositório não contém uma declaração ou arquivo de licença. Os termos de uso e distribuição precisam ser definidos pelos mantenedores.
+Este projeto é distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para
+conhecer os termos completos.

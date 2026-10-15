@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Projeto de gerenciamento de tarefas"
 authors = ["Mantenedores do projeto"]
 readme = "README.md"
+license = "MIT"
 package-mode = false
 
 [tool.poetry.dependencies]
