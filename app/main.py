@@ -1,6 +1,6 @@
 from uuid import UUID, uuid4
 
-from fastapi import FastAPI, HTTPException, Query, status
+from fastapi import FastAPI, HTTPException, Query, status  # pyright: ignore[reportMissingImports]
 
 from app.schemas import Task, TaskCreate
 
