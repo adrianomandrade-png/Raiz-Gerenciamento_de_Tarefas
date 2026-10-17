@@ -17,9 +17,7 @@ _valid_log_levels: Final[frozenset[str]] = frozenset(
     {"CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG", "NOTSET"}
 )
 log_level: Final[str] = (
-    configured_log_level
-    if configured_log_level in _valid_log_levels
-    else "INFO"
+    configured_log_level if configured_log_level in _valid_log_levels else "INFO"
 )
 logging.basicConfig(
     level=log_level,

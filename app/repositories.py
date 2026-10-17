@@ -154,9 +154,7 @@ class TaskRepository(ITaskRepository):
         """
         if task_status is None:
             return await self.list()
-        return [
-            task for task in self._tasks.values() if task.status == task_status
-        ]
+        return [task for task in self._tasks.values() if task.status == task_status]
 
     async def add(self, entity: Task) -> Task:
         """Persiste uma nova tarefa.
