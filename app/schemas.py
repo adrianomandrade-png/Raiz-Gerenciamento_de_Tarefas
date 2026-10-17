@@ -54,3 +54,41 @@ class Task(BaseModel):
         default_factory=_utc_now,
         description="Data e hora de criação da tarefa.",
     )
+
+
+class UserCreate(BaseModel):
+    """Representa os dados necessários para criar um usuário."""
+
+    username: str = Field(
+        min_length=3,
+        max_length=50,
+        description="Nome de usuário, com entre 3 e 50 caracteres.",
+    )
+    email: str = Field(
+        min_length=5,
+        max_length=254,
+        description="Endereço de e-mail do usuário.",
+    )
+
+
+class User(BaseModel):
+    """Representa um usuário da API."""
+
+    id: Optional[UUID] = Field(
+        default=None,
+        description="Identificador único do usuário.",
+    )
+    username: str = Field(
+        min_length=3,
+        max_length=50,
+        description="Nome de usuário, com entre 3 e 50 caracteres.",
+    )
+    email: str = Field(
+        min_length=5,
+        max_length=254,
+        description="Endereço de e-mail do usuário.",
+    )
+    created_at: datetime = Field(
+        default_factory=_utc_now,
+        description="Data e hora de criação do usuário.",
+    )
