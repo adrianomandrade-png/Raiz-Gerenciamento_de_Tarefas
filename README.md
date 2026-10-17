@@ -101,8 +101,16 @@ export APP_TITLE="Raiz — Gerenciamento de Tarefas"
 export LOG_LEVEL="INFO"
 ```
 
-Para carregar essas variáveis a partir de um arquivo local `.env`, crie o arquivo
-na raiz do projeto:
+Para carregar essas variáveis a partir de um arquivo local `.env`, copie o modelo
+versionado:
+
+```bash
+cp .env.example .env
+```
+
+Depois, edite `.env` e substitua `API_KEY` por uma chave longa e aleatória. O
+arquivo `.env.example` não contém credenciais reais e pode ser versionado. O
+arquivo `.env` deve permanecer local:
 
 ```dotenv
 API_KEY=substitua-por-uma-chave-secreta
@@ -119,7 +127,7 @@ source .env
 set +a
 ```
 
-O arquivo `.env` não deve ser versionado. O `.gitignore` do projeto já o ignora.
+O `.gitignore` do projeto já ignora o arquivo `.env`.
 
 ### Configurar PostgreSQL com Docker
 
