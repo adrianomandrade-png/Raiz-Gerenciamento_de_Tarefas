@@ -18,9 +18,10 @@ Pattern para desacoplar a persistência da camada de aplicação.
 5. [Endpoints e exemplos](#endpoints-e-exemplos)
 6. [Execução de testes](#execução-de-testes)
 7. [Estrutura do projeto](#estrutura-do-projeto)
-8. [Como a IA Acelerou Este Projeto](#como-a-ia-acelerou-este-projeto)
-9. [Limitações e Próximos Passos](#limitações-e-próximos-passos)
-10. [Licença](#licença)
+8. [Commits](#commits)
+9. [Como a IA Acelerou Este Projeto](#como-a-ia-acelerou-este-projeto)
+10. [Limitações e Próximos Passos](#limitações-e-próximos-passos)
+11. [Licença](#licença)
 
 ## Tecnologias
 
@@ -263,6 +264,27 @@ Para formatar os arquivos Python com Black:
 ```bash
 make format
 ```
+
+## Commits
+
+O projeto segue o padrão [Conventional Commits](https://www.conventionalcommits.org/).
+Ative o hook local uma vez por clone:
+
+```bash
+make install-hooks
+```
+
+Depois disso, mensagens fora do padrão serão rejeitadas antes da criação do
+commit. Exemplos válidos:
+
+```text
+feat: adicionar endpoint de tarefas
+fix(api): corrigir validação de UUID
+test: cobrir busca de tarefa inexistente
+```
+
+As mensagens também são verificadas automaticamente no GitHub Actions em pushes
+e pull requests.
 
 ## Estrutura do projeto
 

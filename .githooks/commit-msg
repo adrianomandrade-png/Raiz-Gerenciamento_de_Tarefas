@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+
+exec "${PYTHON:-python3}" scripts/validate_commit_message.py "$1"

@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: install run test format
+.PHONY: install run test format install-hooks
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -13,3 +13,6 @@ test:
 
 format:
 	$(PYTHON) -m black .
+
+install-hooks:
+	git config core.hooksPath .githooks
