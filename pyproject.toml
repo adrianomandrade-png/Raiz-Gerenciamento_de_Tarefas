@@ -9,9 +9,16 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-SQLAlchemy = "==3.3.6"
-pydantic = "==2.14.1"
-psycopg = { version = "==2.1.4", extras = ["binary"] }
+fastapi = "==0.115.0"
+pydantic = "==2.10.0"
+SQLAlchemy = "==2.0.36"
+asyncpg = "==0.30.0"
+uvicorn = { version = "==0.32.0", extras = ["standard"] }
+
+[tool.poetry.group.dev.dependencies]
+black = "==25.11.0"
+httpx = "==0.28.1"
+pytest = "==8.4.2"
 
 [build-system]
 requires = ["poetry-core>=1.8.0"]
