@@ -268,6 +268,9 @@ Para formatar os arquivos Python com Black:
 make format
 ```
 
+O GitHub Actions executa automaticamente os testes e verifica a formatação com
+Black em Python 3.9 e 3.11, além de validar as mensagens de commit.
+
 ## Commits
 
 O projeto segue o padrão [Conventional Commits](https://www.conventionalcommits.org/).
@@ -353,7 +356,6 @@ com execução de testes.
 5. Implementar autorização por usuário, papéis e permissões.
 6. Adicionar filtros avançados, ordenação e paginação.
 7. Ampliar os testes com integração real ao PostgreSQL.
-8. Configurar CI para executar testes, Black e verificações de qualidade.
 
 ## Licença
 
