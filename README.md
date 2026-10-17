@@ -176,6 +176,15 @@ Defina a chave usada nos exemplos:
 export API_KEY="substitua-por-uma-chave-secreta"
 ```
 
+### Verificar a saúde da API
+
+```bash
+curl -X GET "http://127.0.0.1:8000/health" \
+  -H "X-API-Key: ${API_KEY}"
+```
+
+Uma aplicação disponível retorna `200 OK` e `{"status":"ok"}`.
+
 ### Criar uma tarefa
 
 ```bash

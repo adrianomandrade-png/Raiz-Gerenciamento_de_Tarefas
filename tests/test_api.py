@@ -6,6 +6,14 @@ from fastapi.testclient import TestClient
 AUTH_HEADERS: Dict[str, str] = {"X-API-Key": "test-api-key"}
 
 
+def test_health_check_returns_ok(client: TestClient) -> None:
+    """Confirma que a aplicação está disponível."""
+    response = client.get("/health", headers=AUTH_HEADERS)
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+
+
 def test_create_task_with_valid_data_returns_created_task(
     client: TestClient,
 ) -> None:

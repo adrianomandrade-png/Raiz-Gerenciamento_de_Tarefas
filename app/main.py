@@ -111,6 +111,12 @@ app: Final[FastAPI] = FastAPI(
 )
 
 
+@app.get("/health")
+async def health_check() -> dict[str, str]:
+    """Indica se a aplicação está disponível."""
+    return {"status": "ok"}
+
+
 @app.get("/tasks", response_model=list[Task])
 async def list_tasks(
     task_status: Optional[bool] = Query(default=None, alias="status"),
