@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "raiz-gerenciamento-de-tarefas"
 version = "0.1.0"
-description = "Projeto de gerenciamento de tarefas"
+description = "Raiz — Gerenciamento de Tarefas"
 authors = ["Mantenedores do projeto"]
 readme = "README.md"
 license = "MIT"

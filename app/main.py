@@ -106,7 +106,7 @@ def get_user_service(
 app: Final[FastAPI] = FastAPI(
     title=os.getenv(
         "APP_TITLE",
-        "Micro-API de Gerenciamento de Tarefas",
+        "Raiz — Gerenciamento de Tarefas",
     ),
     description="API RESTful para criação e gerenciamento de tarefas.",
     dependencies=[Depends(verify_api_key)],

@@ -1,147 +1,336 @@
 # Raiz — Gerenciamento de Tarefas
 
-Uma base em construção para uma API de gerenciamento de tarefas. O repositório ainda não contém a API CRUD descrita no diagrama de arquitetura: no momento, inclui uma função simples para adicionar itens a um carrinho, as dependências Python listadas e um diagrama da arquitetura planejada.
+Micro-API RESTful do **Raiz — Gerenciamento de Tarefas**, desenvolvida em Python
+com FastAPI para criar, listar, atualizar e excluir tarefas. A aplicação utiliza
+modelos Pydantic para validação, serviços para as regras de negócio e o Repository
+Pattern para desacoplar a persistência da camada de aplicação.
+
+> **Estado atual:** o CRUD funciona com repositórios em memória. PostgreSQL,
+> SQLAlchemy e Docker fazem parte da arquitetura planejada, mas a persistência
+> PostgreSQL ainda não foi conectada ao código.
 
 ## Índice
 
-1. [Tecnologias utilizadas](#tecnologias-utilizadas)
+1. [Tecnologias](#tecnologias)
 2. [Pré-requisitos](#pré-requisitos)
 3. [Instalação e configuração](#instalação-e-configuração)
-4. [Uso e exemplos](#uso-e-exemplos)
-5. [Estrutura do projeto](#estrutura-do-projeto)
-6. [Testes](#testes)
-7. [Limitações e próximos passos](#limitações-e-próximos-passos)
-8. [Contribuição](#contribuição)
-9. [Licença](#licença)
+4. [Execução da API](#execução-da-api)
+5. [Endpoints e exemplos](#endpoints-e-exemplos)
+6. [Execução de testes](#execução-de-testes)
+7. [Estrutura do projeto](#estrutura-do-projeto)
+8. [Como a IA Acelerou Este Projeto](#como-a-ia-acelerou-este-projeto)
+9. [Limitações e Próximos Passos](#limitações-e-próximos-passos)
+10. [Licença](#licença)
 
-## Tecnologias utilizadas
+## Tecnologias
 
-- **Linguagem:** Python (a função atual usa anotações de tipo da sintaxe Python 3.9+).
-- **Dependências fixadas** em `requirements.txt` e espelhadas em `pyproject.toml`:
-  - SQLAlchemy 3.3.6
-  - Pydantic 2.14.1
-  - Psycopg 2.1.4, com binários
-- Esses pins vêm dos arquivos do projeto; não foram confirmados por um ambiente Pipenv instalado. FastAPI e Psycopg2 não estão declarados nas dependências atuais.
-- **Arquitetura planejada**, conforme `arquitetura.md`: frontend React, API FastAPI, validação Pydantic, persistência SQLAlchemy e PostgreSQL.
-- **Infraestrutura:** PostgreSQL está no desenho arquitetural, mas ainda não há configuração de banco ou containers no repositório.
-- **Assistentes de IA:** não há ferramentas ou versões documentadas no projeto.
+- **Python 3.11** — linguagem-alvo do projeto. O código atual também mantém
+  compatibilidade declarada com Python 3.9 ou superior.
+- **FastAPI 0.115.0** — framework para a API RESTful.
+- **Pydantic 2.10.0** — validação e serialização dos dados.
+- **SQLAlchemy 2.0.36** — ORM previsto para a persistência relacional.
+- **PostgreSQL** — banco de dados previsto para a versão persistente da API.
+- **Docker** — tecnologia prevista para executar serviços, incluindo PostgreSQL.
+- **Pytest 8.4.2** — testes automatizados.
+- **Black 25.11.0** — formatação do código Python.
+- **Uvicorn 0.32.0** — servidor ASGI.
+- **GitHub Copilot** — auxílio à escrita e autocompletar código.
+- **Cursor** — apoio a refatorações que envolvem múltiplos arquivos.
+- **Claude 4.6 Sonnet** — apoio à geração e revisão dos testes unitários.
+
+O driver PostgreSQL atualmente instalado no ambiente é `asyncpg 0.30.0`.
+Embora Psycopg2 seja mencionado no escopo original, ele não está instalado no
+ambiente atual e não é usado pela implementação presente.
+A implementação atual usa armazenamento em memória; por isso, as dependências
+SQLAlchemy, PostgreSQL e Docker ainda não participam do fluxo de execução do
+CRUD.
 
 ## Pré-requisitos
 
-- Python 3.11 recomendado (Python 3.9 ou superior para executar o código atual).
-- Git.
-- `venv` e `pip`, incluídos na instalação padrão do Python.
+Para executar a versão atual da API:
 
-PostgreSQL, Docker e Node.js não são necessários para executar o código atualmente presente. Poderão ser necessários quando a API e a arquitetura planejada forem implementadas.
+- Python 3.9 ou superior instalado;
+- `pip` disponível;
+- Git;
+- acesso a um terminal;
+- ambiente virtual recomendado.
+
+Para a futura execução com PostgreSQL e Docker:
+
+- Docker Engine e Docker Compose instalados;
+- PostgreSQL 14 ou superior, caso o banco seja executado localmente sem Docker;
+- uma porta disponível para a API, por padrão `8000`;
+- uma porta disponível para o PostgreSQL, por padrão `5432`.
 
 ## Instalação e configuração
 
-Clone o repositório e crie um ambiente virtual:
+### Clonar o projeto
 
 ```bash
 git clone https://github.com/adrianomandrade-png/Raiz-Gerenciamento_de_Tarefas.git
 cd Raiz-Gerenciamento_de_Tarefas
-python3 -m venv .venv
-source .venv/bin/activate
 ```
 
-Instale as dependências declaradas:
+### Configurar o ambiente com Pipenv
+
+Instale o Pipenv caso ele ainda não esteja disponível:
 
 ```bash
-python -m pip install --upgrade pip
+python3 -m pip install --user pipenv
+```
+
+Crie o ambiente e instale as dependências:
+
+```bash
+pipenv --python 3.11
+pipenv install -r requirements.txt
+pipenv shell
+```
+
+Como alternativa, usando o ambiente virtual local utilizado neste projeto:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-Como alternativa, usando Poetry:
+### Configurar as variáveis de ambiente
+
+A API exige uma chave no ambiente para proteger as rotas:
 
 ```bash
-poetry install
+export API_KEY="substitua-por-uma-chave-secreta"
+export APP_TITLE="Raiz — Gerenciamento de Tarefas"
+export LOG_LEVEL="INFO"
 ```
 
-O código atual não lê variáveis de ambiente, não exige arquivo `.env` e não conecta a um banco de dados. Não há configuração de containers no repositório.
+Para carregar essas variáveis a partir de um arquivo local `.env`, crie o arquivo
+na raiz do projeto:
 
-## Uso e exemplos
-
-Ainda não há servidor FastAPI nem endpoints HTTP implementados. A função disponível pode ser usada diretamente em Python:
-
-```python
-from shopping_cart import add_item_to_cart
-
-cart: dict[str, int] = {}
-add_item_to_cart(cart, "caderno", 3)
-
-print(cart)
-# {'caderno': 3}
+```dotenv
+API_KEY=substitua-por-uma-chave-secreta
+APP_TITLE=Raiz — Gerenciamento de Tarefas
+LOG_LEVEL=INFO
 ```
 
-Para executar o exemplo sem criar um arquivo:
+O código lê as variáveis com `os.getenv`. Portanto, carregue o arquivo no shell
+antes de iniciar a API:
 
 ```bash
-python -c 'from shopping_cart import add_item_to_cart; cart = {}; add_item_to_cart(cart, "caderno", 3); print(cart)'
+set -a
+source .env
+set +a
+```
+
+O arquivo `.env` não deve ser versionado. O `.gitignore` do projeto já o ignora.
+
+### Configurar PostgreSQL com Docker
+
+Ainda não existe um `docker-compose.yml` neste repositório. Quando a integração
+com PostgreSQL for implementada, a configuração deverá incluir, no mínimo:
+
+```dotenv
+DATABASE_URL=postgresql+asyncpg://usuario:senha@localhost:5432/tarefas
+```
+
+Neste momento, `DATABASE_URL` é apenas uma configuração planejada e não é
+consumida pela aplicação atual.
+
+## Execução da API
+
+Com as variáveis de ambiente carregadas, execute:
+
+```bash
+python -m uvicorn app.main:app --reload
+```
+
+Ou use o comando equivalente do Makefile:
+
+```bash
+make run
+```
+
+A API ficará disponível em `http://127.0.0.1:8000`.
+
+Documentação interativa:
+
+- Swagger UI: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- ReDoc: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
+Todas as rotas de tarefas exigem o cabeçalho:
+
+```http
+X-API-Key: substitua-por-uma-chave-secreta
+```
+
+## Endpoints e exemplos
+
+Defina a chave usada nos exemplos:
+
+```bash
+export API_KEY="substitua-por-uma-chave-secreta"
+```
+
+### Criar uma tarefa
+
+```bash
+curl -X POST "http://127.0.0.1:8000/tasks" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: ${API_KEY}" \
+  -d '{
+    "title": "Estudar FastAPI",
+    "description": "Revisar os endpoints da API",
+    "status": false
+  }'
+```
+
+Resposta esperada: `201 Created`, com o `id` UUID e o campo `created_at`
+preenchidos pela API.
+
+### Listar tarefas
+
+```bash
+curl -X GET "http://127.0.0.1:8000/tasks" \
+  -H "X-API-Key: ${API_KEY}"
+```
+
+Para filtrar pelo status:
+
+```bash
+curl -X GET "http://127.0.0.1:8000/tasks?status=true" \
+  -H "X-API-Key: ${API_KEY}"
+```
+
+### Buscar uma tarefa por UUID
+
+Substitua `<TASK_ID>` pelo UUID retornado na criação:
+
+```bash
+curl -X GET "http://127.0.0.1:8000/tasks/<TASK_ID>" \
+  -H "X-API-Key: ${API_KEY}"
+```
+
+### Atualizar uma tarefa
+
+```bash
+curl -X PUT "http://127.0.0.1:8000/tasks/<TASK_ID>" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: ${API_KEY}" \
+  -d '{
+    "title": "Estudar FastAPI e Pydantic",
+    "description": "Concluir a revisão da API",
+    "status": true
+  }'
+```
+
+### Excluir uma tarefa
+
+```bash
+curl -X DELETE "http://127.0.0.1:8000/tasks/<TASK_ID>" \
+  -H "X-API-Key: ${API_KEY}"
+```
+
+A exclusão bem-sucedida retorna `204 No Content`. Um UUID inexistente retorna
+`404 Not Found`.
+
+## Execução de testes
+
+Instale as dependências e execute a suíte com:
+
+```bash
+python -m pytest
+```
+
+Ou use:
+
+```bash
+make test
+```
+
+Os testes cobrem:
+
+- criação de tarefas;
+- listagem e filtro por status;
+- atualização do status para `true`;
+- exclusão;
+- UUID inexistente ou inválido;
+- autenticação por API key;
+- limites de validação dos campos Pydantic.
+
+Para formatar os arquivos Python com Black:
+
+```bash
+make format
 ```
 
 ## Estrutura do projeto
 
 ```text
 .
-├── LICENSE             # Licença MIT
-├── README.md           # Visão geral e instruções do projeto
-├── arquitetura.md      # Diagrama da arquitetura planejada
-├── pyproject.toml      # Configuração básica de dependências para Poetry
-├── requirements.txt    # Dependências Python fixadas
-├── shopping_cart.py    # Função atual para adicionar item ao carrinho
-└── .gitignore          # Arquivos e diretórios ignorados pelo Git
+├── app/
+│   ├── main.py           # Aplicação FastAPI, autenticação e endpoints
+│   ├── repositories.py   # IRepository e repositórios concretos
+│   ├── schemas.py        # Modelos Pydantic de entrada e saída
+│   └── services.py       # Regras de negócio e injeção de repositórios
+├── tests/
+│   ├── conftest.py       # Fixtures e isolamento do repositório
+│   ├── test_api.py       # Testes dos endpoints HTTP
+│   └── test_schemas.py   # Testes de validação Pydantic
+├── arquitetura.md        # Diagrama da arquitetura planejada
+├── Makefile              # Comandos de instalação, execução, testes e formato
+├── pyproject.toml        # Configuração básica para Poetry
+├── requirements.txt      # Dependências com versões fixadas
+├── shopping_cart.py      # Exemplo independente de função tipada
+└── .gitignore
 ```
 
-## Testes
+## Como a IA Acelerou Este Projeto
 
-O repositório ainda não contém testes automatizados nem configura Pytest ou cobertura. Para preparar essas ferramentas:
+Ferramentas de inteligência artificial generativa foram utilizadas como apoio
+ao desenvolvimento, sempre com revisão humana:
 
-```bash
-python -m pip install pytest pytest-cov
-```
+- **GitHub Copilot:** auxiliou o autocompletar, a criação de trechos repetitivos
+  e a exploração inicial de soluções;
+- **Cursor:** apoiou refatorações que envolviam vários arquivos, como a
+  separação entre rotas, serviços e repositórios;
+- **Claude 4.6 Sonnet:** auxiliou na geração e revisão dos testes unitários,
+  incluindo cenários de caminho feliz e casos de borda.
 
-Quando os testes forem adicionados, execute-os e gere um relatório de cobertura com:
+Esse uso acelerou a implementação, a documentação, a criação de testes e a
+identificação de inconsistências entre os arquivos do projeto. A revisão humana
+foi essencial para validar requisitos, conferir compatibilidade das versões,
+revisar segurança, corrigir sugestões inadequadas e confirmar os resultados
+com execução de testes.
 
-```bash
-python -m pytest
-python -m pytest --cov=shopping_cart --cov-report=term-missing
-```
+## Limitações e Próximos Passos
 
-## Limitações e próximos passos
+### Limitações atuais
 
-- A função atual trata de um carrinho, não de tarefas, e não há operações CRUD.
-- FastAPI, modelos Pydantic, serviços, repositórios e integração com PostgreSQL estão apenas representados no diagrama arquitetural.
-- Não há testes, cobertura, configuração de ambiente, migrações ou containers.
-- Não há documentação sobre autenticação, autorização ou filtros de busca.
-- As ferramentas de IA utilizadas ainda não estão especificadas.
+- O armazenamento atual é em memória; os dados são perdidos quando a aplicação
+  é reiniciada.
+- Ainda não há integração efetiva com PostgreSQL, SQLAlchemy ou Docker.
+- Há proteção simples por API key, mas não existe autenticação de usuários
+  robusta com JWT/OAuth2.
+- Não há autorização por usuário, papéis ou permissões: a API key não identifica
+  um usuário nem restringe tarefas por proprietário.
+- Os filtros disponíveis estão limitados ao campo booleano `status`.
+- Não há filtros avançados por título, descrição, período de criação, ordenação
+  ou paginação.
+- Não há migrações de banco de dados nem `docker-compose.yml`.
 
-Próximos passos sugeridos:
+### Próximos passos
 
-1. Implementar a API de tarefas de acordo com o diagrama.
-2. Definir configuração e execução local do PostgreSQL, incluindo migrações.
-3. Adicionar testes unitários e de integração e configurar cobertura.
-4. Documentar endpoints, variáveis de ambiente e decisões de segurança.
-5. Evoluir a API e documentar os contratos dos endpoints.
-
-## Contribuição
-
-1. Faça um fork do repositório no GitHub.
-2. Crie uma branch para sua alteração:
-
-   ```bash
-   git checkout -b feat/descricao-da-alteracao
-   ```
-
-3. Faça alterações pequenas e focadas, seguindo o estilo existente e mantendo as anotações de tipo.
-4. Execute os testes disponíveis. Se adicionar testes, documente como executá-los.
-5. Envie sua branch e abra um Pull Request descrevendo a motivação e as mudanças:
-
-   ```bash
-   git push origin feat/descricao-da-alteracao
-   ```
+1. Implementar repositórios PostgreSQL com SQLAlchemy e `asyncpg`.
+2. Criar modelos persistentes, migrações e configuração segura de conexão.
+3. Adicionar Dockerfile e Docker Compose para API e PostgreSQL.
+4. Substituir a API key simples por autenticação de usuários com JWT ou OAuth2.
+5. Implementar autorização por usuário, papéis e permissões.
+6. Adicionar filtros avançados, ordenação e paginação.
+7. Ampliar os testes com integração real ao PostgreSQL.
+8. Configurar CI para executar testes, Black e verificações de qualidade.
 
 ## Licença
 
-Este projeto é distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para
-conhecer os termos completos.
+Este projeto é distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE)
+para conhecer os termos completos.
