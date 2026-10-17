@@ -72,29 +72,24 @@ git clone https://github.com/adrianomandrade-png/Raiz-Gerenciamento_de_Tarefas.g
 cd Raiz-Gerenciamento_de_Tarefas
 ```
 
-### Configurar o ambiente com Pipenv
+### Configurar o ambiente virtual
 
-Instale o Pipenv caso ele ainda não esteja disponível:
-
-```bash
-python3 -m pip install --user pipenv
-```
-
-Crie o ambiente e instale as dependências:
-
-```bash
-pipenv --python 3.11
-pipenv install -r requirements.txt
-pipenv shell
-```
-
-Como alternativa, usando o ambiente virtual local utilizado neste projeto:
+O fluxo oficial desta versão usa `venv` e o `requirements.txt`, que contém as
+versões exatas das dependências:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install --upgrade pip
+make install
+make install-hooks
 ```
+
+Depois de ativar o ambiente virtual, os comandos `make run`, `make test` e
+`make format` usam o Python e os pacotes desse ambiente.
+
+O `pyproject.toml` contém metadados e uma configuração opcional para Poetry,
+mas o fluxo oficial desta release não depende de Poetry ou Pipenv.
 
 ### Configurar as variáveis de ambiente
 
